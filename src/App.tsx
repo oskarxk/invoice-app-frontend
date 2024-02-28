@@ -1,26 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { Authenthication } from './pages/Authenthication';
+import { Invoices } from './pages/Invoices';
+import { AuthenticationPrivateRoutes } from './components/form-authentication-components/AuthenticationPrivateRoutes';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className='App'>
+			<Routes>
+				<Route element={<AuthenticationPrivateRoutes />}>
+					<Route element={<Invoices />} path='/invoices' />
+				</Route>
+				<Route element={<Authenthication />} path='/' />
+				{/* <Route element={<NotFoundPage />} path="*" /> */}
+			</Routes>
+		</div>
+	);
 }
 
 export default App;
