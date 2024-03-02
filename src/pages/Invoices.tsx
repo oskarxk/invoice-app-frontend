@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigation } from '../components/navigation/Navigation';
+import { InvoiceList } from '../components/invoice-list/InvoiceList';
 
 type Props = {
 	currentTheme: string;
@@ -18,7 +19,7 @@ export const Invoices = ({ currentTheme, setCurrentTheme }: Props) => {
 				currentTheme={currentTheme}
 				setCurrentTheme={setCurrentTheme}
 			/>
-			{/* <p>invoices</p> */}
+			<InvoiceList currentTheme={currentTheme} />
 		</div>
 	);
 };

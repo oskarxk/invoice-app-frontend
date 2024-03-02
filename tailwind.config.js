@@ -10,6 +10,8 @@ module.exports = {
           lightPuprleFont: '#7E88C3',
           buttonBackground: '#7C5DFA',
           secondary: '#666666',
+          textLightBoth: '#DFE3FA',
+          textWhite: '#FFFFFF'
         },
         light: {
           background: '#F8F8FB',
@@ -17,6 +19,8 @@ module.exports = {
           lightPuprleFont: '#7E88C3',
           buttonBackground: '#7C5DFA',
           secondary: '#DDDDDD',
+          textLightBoth: '#888EB0',
+          textBlack: '#0C0E16'
         },
       },
       height: {
