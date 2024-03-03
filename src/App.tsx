@@ -13,7 +13,6 @@ function App() {
 					<Route element={<Invoices />} path='/invoices' />
 				</Route>
 				<Route element={<Authenthication />} path='/' />
-				{/* <Route element={<NotFoundPage />} path="*" /> */}
 			</Routes>
 		</div>
 	);
