@@ -19,7 +19,6 @@ function App() {
 					<Route element={<Invoices currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} path='/invoices' />
 				</Route>
 				<Route element={<Authenthication />} path='/' />
-				{/* <Route element={<NotFoundPage />} path="*" /> */}
 			</Routes>
 		</div>
 	);
