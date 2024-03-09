@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Input } from './Input';
 import { initialValues, registerSchema } from './registerData';
@@ -22,6 +21,8 @@ export const Register = ({
 
 				setTimeout(() => {
 					setLogin('login');
+					setNotifyMessage('Log in to your account');
+					setNotifyTheme(ToastTheme.INFO);
 				}, 5000);
 			})
 			.catch((error) => {

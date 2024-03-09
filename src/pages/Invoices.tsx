@@ -1,23 +1,18 @@
 import React from 'react';
 import { Navigation } from '../components/navigation/Navigation';
+import { useTheme } from '../context/ThemeContext';
 
-type Props = {
-	currentTheme: string;
-	setCurrentTheme: React.Dispatch<React.SetStateAction<string>>;
-};
+export const Invoices = () => {
+	const { theme } = useTheme();
 
-export const Invoices = ({ currentTheme, setCurrentTheme }: Props) => {
 
 	return (
 		<div
 			className={`flex w-full h-screen ${
-				currentTheme === 'light' ? 'bg-light-background' : 'bg-dark-background'
+				theme === 'light' ? 'bg-light-background' : 'bg-dark-background'
 			}`}
 		>
-			<Navigation
-				currentTheme={currentTheme}
-				setCurrentTheme={setCurrentTheme}
-			/>
+			<Navigation />
 			{/* <p>invoices</p> */}
 		</div>
 	);

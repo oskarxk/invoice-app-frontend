@@ -1,6 +1,7 @@
 export enum ToastTheme {
 	'SUCCESS' = 'success',
 	'ERROR' = 'error',
+	'INFO' = 'info'
 }
 
 export type Logintype = {

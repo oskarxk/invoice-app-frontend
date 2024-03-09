@@ -1,27 +1,24 @@
 import React from 'react';
 import moon from '../../assets/icon-moon.svg';
 import sun from '../../assets/icon-sun.svg';
+import { useTheme } from '../../context/ThemeContext';
 
-type Props = {
-	currentTheme: string;
-	setCurrentTheme: React.Dispatch<React.SetStateAction<string>>;
-};
-
-export const ThemeSwitcher = ({ currentTheme, setCurrentTheme }: Props) => {
+export const ThemeSwitcher = () => {
+	const { theme, toggleTheme } = useTheme();
 
 	const handleToggleTheme = () => {
-		if (currentTheme === 'light') {
+		if (theme === 'light') {
 			localStorage.setItem('theme', 'dark');
-			setCurrentTheme('dark');
+			toggleTheme();
 		} else {
 			localStorage.setItem('theme', 'light');
-			setCurrentTheme('light');
+			toggleTheme();
 		}
 	};
 
 	return (
 		<div onClick={handleToggleTheme} className='cursor-pointer p-2'>
-			{currentTheme === 'light' ? (
+			{theme === 'light' ? (
 				<div>
 					<img src={moon} alt='Moon' />
 				</div>
