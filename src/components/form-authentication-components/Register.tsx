@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Input } from './Input';
 import { initialValues, registerSchema } from './registerData';
+import { ToastTheme, RegisterType, setLoginType } from './types';
 
-type setLoginType = {
-	setLogin: React.Dispatch<React.SetStateAction<string>>;
-};
+export const Register = ({
+	setLogin,
+	setNotifyMessage,
+	setNotifyTheme,
+}: setLoginType) => {
 
-type RegisterType = {
-	name: string;
-	email: string;
-	password: string;
-};
+	const handleRegister = async () => {
+		axios
+			.post('http://localhost:4000/signup', registerData)
+			.then((response) => {
+				setbtnRegisterSuccess(true);
+				setNotifyMessage(response.data.message);
+				setNotifyTheme(ToastTheme.SUCCESS);
 
-export const Register = ({ setLogin }: setLoginType) => {
-	const navigate = useNavigate();
-
-	const handleRegister = async () => {};
+				setTimeout(() => {
+					setLogin('login');
+				}, 5000);
+			})
+			.catch((error) => {
+				setNotifyMessage(error.response.data.message);
+				setNotifyTheme(ToastTheme.ERROR);
+			});
+	};
 
 	const formik = useFormik({
 		initialValues,
@@ -27,14 +38,16 @@ export const Register = ({ setLogin }: setLoginType) => {
 		enableReinitialize: false,
 	});
 
-	const [register, setRegister] = useState<RegisterType>({
+	const [btnRegisterSuccess, setbtnRegisterSuccess] = useState<boolean>(false);
+
+	const [registerData, setRegisterData] = useState<RegisterType>({
 		name: formik.values.name,
 		email: formik.values.email,
 		password: formik.values.password,
 	});
 
 	useEffect(() => {
-		setRegister((prevRegisterInfo) => ({
+		setRegisterData((prevRegisterInfo) => ({
 			...prevRegisterInfo,
 			name: formik.values.name,
 			email: formik.values.email,
@@ -47,7 +60,9 @@ export const Register = ({ setLogin }: setLoginType) => {
 			onSubmit={formik.handleSubmit}
 			className='md:w-1/2 lg:1/4 xl:w-1/4 2xl:w-1/4 w-3/4 md:h-1/2 h-3/5 flex flex-col justify-center items-center bg-light-background rounded-xl'
 		>
-			<h3 className=' text-4xl font-bold mb-4 text-dark-buttonBackground'>Register</h3>
+			<h3 className=' text-4xl font-bold mb-4 text-dark-buttonBackground'>
+				Register
+			</h3>
 			<div className='flex flex-col md:w-3/5 w-3/4'>
 				<Input
 					name={'name'}
@@ -77,9 +92,15 @@ export const Register = ({ setLogin }: setLoginType) => {
 					placeholder='Password'
 				/>
 				<div className='flex justify-between items-center w-full my-4'>
-					<button className='w-full bg-dark-buttonBackground text-light-background p-2 rounded-2xl'>
-						Sign up
-					</button>
+					{btnRegisterSuccess ? (
+						<div className='w-full bg-green-600 text-light-background p-2 rounded-2xl cursor-not-allowed'>
+							Success ✅️
+						</div>
+					) : (
+						<button className='w-full bg-dark-buttonBackground text-light-background p-2 rounded-2xl'>
+							Sign up
+						</button>
+					)}
 				</div>
 				<div className='flex justify-between items-center w-full text-xs'>
 					<p className='w-1-2 text-dark-lightPuprleFont'>
