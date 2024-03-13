@@ -10,7 +10,6 @@ module.exports = {
           lightPuprleFont: '#7E88C3',
           buttonBackground: '#7C5DFA',
           secondary: '#666666',
-          // Dodaj więcej kolorów ciemnych według potrzeb
         },
         light: {
           background: '#F8F8FB',
@@ -18,9 +17,22 @@ module.exports = {
           lightPuprleFont: '#7E88C3',
           buttonBackground: '#7C5DFA',
           secondary: '#DDDDDD',
-          // Dodaj więcej kolorów jasnych według potrzeb
         },
       },
+      height: {
+        '1/10': '10%',
+        '2/10': '20%',
+        '8/10': '80%',
+      },
+      width: {
+        '1/10': '10%',
+        '2/10': '20%',
+        '8/10': '80%',
+        '6/10': '60%',
+      },
+      borderWidth: {
+        '1': '1px',
+      }
     },
 
 	},

@@ -1,8 +1,9 @@
 import { Outlet, Navigate } from 'react-router';
 
 export const AuthenticationPrivateRoutes = () => {
+
   const isAuthenticated = () => {
-    return sessionStorage.getItem('authToken') !== null;
+    return sessionStorage.getItem('token') !== null;
   };
 
   const isLoggedIn = isAuthenticated();
