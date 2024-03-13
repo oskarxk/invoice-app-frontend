@@ -25,10 +25,9 @@ export const Login = ({
 				setbtnLoginSuccess(true);
 				setNotifyMessage(response.data.message);
 				setNotifyTheme(ToastTheme.SUCCESS);
-
 				setTimeout(() => {
 					navigate('/invoices');
-				}, 5000);
+				}, 2000);
 			})
 			.catch((error) => {
 				setNotifyMessage(error.response.data.message);

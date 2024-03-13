@@ -23,7 +23,7 @@ export const Register = ({
 					setLogin('login');
 					setNotifyMessage('Log in to your account');
 					setNotifyTheme(ToastTheme.INFO);
-				}, 5000);
+				}, 2000);
 			})
 			.catch((error) => {
 				setNotifyMessage(error.response.data.message);

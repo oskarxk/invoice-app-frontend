@@ -6,15 +6,10 @@ import { useTheme } from '../../context/ThemeContext';
 export const ThemeSwitcher = () => {
 	const { theme, toggleTheme } = useTheme();
 
-	const handleToggleTheme = () => {
-		if (theme === 'light') {
-			localStorage.setItem('theme', 'dark');
-			toggleTheme();
-		} else {
-			localStorage.setItem('theme', 'light');
-			toggleTheme();
-		}
-	};
+	const handleToggleTheme = () =>
+		theme === 'light'
+			? (localStorage.setItem('theme', 'dark'), toggleTheme())
+			: (localStorage.setItem('theme', 'light'), toggleTheme());
 
 	return (
 		<div onClick={handleToggleTheme} className='cursor-pointer p-2'>
