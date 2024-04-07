@@ -12,7 +12,10 @@ module.exports = {
           secondary: '#666666',
           textLightBoth: '#DFE3FA',
           textWhite: '#FFFFFF',
-          invoiceBG: '#FFFFFF'
+          invoiceBG: '#1E2139',
+          inputBG: '#252945',
+          inputFont: '#DFE3FA',
+          filterBG: '#252945'
         },
         light: {
           background: '#F8F8FB',
@@ -22,8 +25,11 @@ module.exports = {
           secondary: '#DDDDDD',
           textLightBoth: '#888EB0',
           textBlack: '#0C0E16',
-          invoiceBG: '#1E2139',
-          whiteBackground: '#FFFFFF'
+          invoiceBG: '#FFFFFF',
+          whiteBackground: '#FFFFFF',
+          inputBG: '#F9FAFE',
+          inputFont: '#7E88C3',
+          filterBG: '#FFFFFF'
         },
       },
       height: {
@@ -35,6 +41,7 @@ module.exports = {
         '1/10': '10%',
         '2/10': '20%',
         '3/10': '30%',
+        '4/10': '40%',
         '4.5/10': '45%',
         '8/10': '80%',
         '6/10': '60%',

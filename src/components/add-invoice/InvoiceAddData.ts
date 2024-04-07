@@ -1,91 +1,74 @@
-import * as Yup from 'yup';
+import { z } from "zod";
 
-export const addInvoiceSchema = Yup.object().shape({
-	streetAdress: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper street adress'),
-	city: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper city'),
-	postCode: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper post-code'),
-	country: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper country'),
-	clientName: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper client name'),
-	clientEmail: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper client email'),
-	clientStreetAdress: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper client street adress'),
-	clientCity: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper client city'),
-	clientPostCode: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper client post-code'),
-	clientCountry: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper client country'),
-	invoiceDate: Yup.date()
-		.required('Please provide an invoice date')
-		.min(
-			new Date(Date.now() - 30 * 86400000),
-			'Invoice date must be within the last 30 days'
-		)
-		.max(
-			new Date(Date.now() + 30 * 86400000),
-			'Invoice date cannot be more than 30 days in the future'
-		),
-	paymentDate: Yup.date().required('Please provide an payment date'),
-	invoiceTitle: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper invoice tittle'),
-	itemName: Yup.string()
-		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('Please provide a proper item tittle'),
-	quantity: Yup.number()
-		.positive('Quantity must be a positive number')
-		.integer('Quantity must be an integer')
-		.min(1, 'Quantity must be at least 1')
-		.required('Please provide quantity'),
-	price: Yup.number()
-    .positive('Price must be a positive number')
-    .min(0.01, 'Price must be at least 0.01')
-    .required('Please provide price'),
+const currentDate = new Date();
+const minDate = new Date(
+	currentDate.getFullYear(),
+	currentDate.getMonth() - 1,
+	currentDate.getDate()
+);
+const maxDate = new Date(
+	currentDate.getFullYear(),
+	currentDate.getMonth() + 1,
+	currentDate.getDate()
+);
+
+export const invoiceSchema = z.object({
+	streetAdress: z
+		.string()
+		.min(2, 'Street adress is required')
+		.max(50, 'Too Long street adress!'),
+	city: z.string().min(2, 'City is required').max(50, 'Too Long City!'),
+	postCode: z
+		.string()
+		.min(5, { message: 'Postal code is required!' })
+		.max(10, { message: 'Postal code is too long!' }),
+	country: z
+		.string()
+		.min(2, 'Country is required')
+		.max(50, 'Too Long Country!'),
+	clientName: z
+		.string()
+		.min(2, 'Client name is required')
+		.max(50, 'Too Long Client name!'),
+	clientEmail: z
+		.string()
+		.email('Invalid email format!')
+		.min(5, { message: 'Email address is required!' })
+		.max(50, { message: 'Email address is too long!' }),
+	clientStreetAdress: z
+		.string()
+		.min(2, 'Client street adress is required')
+		.max(50, 'Too Long client street adress!'),
+	clientCity: z
+		.string()
+		.min(2, 'Client city is required')
+		.max(50, 'Too Long client city!'),
+	clientPostCode: z
+		.string()
+		.min(5, { message: 'Client postal code is required!' })
+		.max(10, { message: 'Client postal code is too long!' }),
+	clientCountry: z
+		.string()
+		.min(2, 'Client country is required')
+		.max(50, 'Too Long client country!'),
+	invoiceDate: z
+		.date()
+		.min(minDate, { message: 'Date is too early!' })
+		.max(maxDate, { message: 'Date is too far in the future!' }),
+	paymentDate: z.enum(['1', '7', '14', '30']),
+	invoiceTitle: z
+		.string()
+		.min(2, 'Invoice title is required')
+		.max(50, 'Too Long invoice title!'),
+	products: z.array(
+		z.object({
+			itemName: z
+				.string()
+				.min(2, 'Too short item name!')
+				.max(50, 'Too long item name!'),
+			quantity: z.number().min(1, 'Quantity must be at least 1'),
+			price: z.number().min(0.01, 'Price must be at least 0.01'),
+			totalPrice: z.number()
+		})
+	),
 });
-
-export const initialValues = {
-	streetAdress: '',
-	city: '',
-	postCode: '',
-	country: '',
-	clientName: '',
-	clientEmail: '',
-	clientStreetAdress: '',
-	clientCity: '',
-	clientPostCode: '',
-	clientCountry: '',
-	invoiceDate: '',
-	paymentDate: '',
-	invoiceTitle: '',
-    itemName: '',
-    quantity: 1,
-    price: 0.01,
-};

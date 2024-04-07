@@ -10,6 +10,7 @@ import { NavigationListButtons } from '../components/invoice-list/Buttons/Naviga
 import { NothingHere } from '../components/invoice-list/NothingHere';
 import { Loading } from '../components/invoice-list/Loading';
 import { AddInvoice } from '../components/add-invoice/AddInvoice';
+import FilterPopUp from '../components/invoice-list/FilterPopUp';
 
 type InvoiceProduct = {
 	itemName: string;
@@ -18,7 +19,7 @@ type InvoiceProduct = {
 };
 
 type InvoiceData = {
-	_id: String;
+	_id: string;
 	invoiceNumber: string;
 	address: string;
 	invoiceAuthorEmail: string;
@@ -36,8 +37,8 @@ type InvoiceData = {
 	invoiceDate: string;
 	paymentDate: string;
 	invoiceTitle: string;
-	invoiceSum: number; // dodac na backendzie
-	status: string; // dodac na backendzie
+	invoiceSum: number;
+	status: string; 
 	products: InvoiceProduct[];
 };
 
@@ -60,6 +61,42 @@ export const Invoices = () => {
 	const [notifyMessage, setNotifyMessage] = useState<string>();
 	const [isLoading, setIsLoading] = useState(false);
 	const [addInvoice, setAddInvoice] = useState<boolean>(false);
+	const [handleFilter, setHandleFilter] = useState<boolean>(false);
+
+	const [selectedStatus, setSelectedStatus] = useState<string>('all');
+
+	const handleStatusChange = () => {
+		let filteredInvoices = invoiceData;
+
+		if (filteredInvoices !== undefined) {
+			if (selectedStatus !== 'all') {
+				filteredInvoices = filteredInvoices.filter(
+					(invoice) => invoice.status === selectedStatus
+				);
+			}
+
+			if (selectedStatus === 'Paid') {
+				filteredInvoices = filteredInvoices.filter(
+					(invoice) => invoice.status === 'Paid'
+				);
+			}
+
+			if (selectedStatus === 'Draft') {
+				filteredInvoices = filteredInvoices.filter(
+					(invoice) => invoice.status === 'Draft'
+				);
+			}
+
+			if (selectedStatus === 'Pending') {
+				filteredInvoices = filteredInvoices.filter(
+					(invoice) => invoice.status === 'Pending'
+				);
+			}
+			return filteredInvoices;
+		}
+	};
+
+	const filteredInvoices = handleStatusChange();
 
 	useEffect(() => {
 		const getInvoices = async () => {
@@ -69,24 +106,24 @@ export const Invoices = () => {
 					headers: { Authorization: token },
 				})
 				.then((response) => {
-					console.log('RESPONSE',response);
+					console.log('RESPONSE', response);
 
-					
-						const mappedData: InvoiceListData[] =
-							response.data.userInvoices.map((invoice: InvoiceData) => {
-								return {
-									_id: invoice._id,
-									invoiceNumber: invoice.invoiceNumber,
-									paymentDate: invoice.paymentDate,
-									clientName: invoice.clientName,
-									invoiceSum: invoice.invoiceSum,
-									status: invoice.status,
-								};
-							});
-						setInvoiceData(mappedData);
-						setIsLoading(false);
-						setNotifyMessage(response.data.message);
-						setNotifyTheme(ToastTheme.SUCCESS);	
+					const mappedData: InvoiceListData[] = response.data.userInvoices.map(
+						(invoice: InvoiceData) => {
+							return {
+								_id: invoice._id,
+								invoiceNumber: invoice.invoiceNumber,
+								paymentDate: invoice.paymentDate,
+								clientName: invoice.clientName,
+								invoiceSum: invoice.invoiceSum,
+								status: invoice.status,
+							};
+						}
+					);
+					setInvoiceData(mappedData);
+					setIsLoading(false);
+					setNotifyMessage(response.data.message);
+					setNotifyTheme(ToastTheme.SUCCESS);
 				})
 				.catch((error) => {
 					setNotifyMessage(error.response.data.message);
@@ -112,8 +149,8 @@ export const Invoices = () => {
 
 	return (
 		<div
-			className={`flex w-full h-screen ${
-				theme === 'light' ? 'bg-light-in' : 'bg-dark-background'
+			className={`flex w-full ${
+				theme === 'light' ? 'bg-light-background' : 'bg-dark-background'
 			}`}
 		>
 			<ToastContainer
@@ -128,15 +165,29 @@ export const Invoices = () => {
 				pauseOnHover
 				theme='dark'
 			/>
+			{handleFilter && (
+				<FilterPopUp
+					selectedStatus={selectedStatus}
+					setSelectedStatus={setSelectedStatus}
+					handleStatusChange={handleStatusChange}
+				/>
+			)}
 			<Navigation />
-			<AddInvoice addInvoice={addInvoice} setAddInvoice={setAddInvoice} />
+			<AddInvoice
+				addInvoice={addInvoice}
+				setAddInvoice={setAddInvoice}
+				setNotifyMessage={setNotifyMessage}
+				setNotifyTheme={setNotifyTheme}
+			/>
 			<div className='w-full items-center flex flex-col'>
 				<NavigationListButtons
 					invoiceData={invoiceData}
 					setAddInvoice={setAddInvoice}
+					handleFilter={handleFilter}
+					setHandleFilter={setHandleFilter}
 				/>
-				{invoiceData && invoiceData.length !== 0 ? (
-					<InvoiceList invoiceData={invoiceData} />
+				{filteredInvoices && filteredInvoices.length !== 0 ? (
+					<InvoiceList filteredInvoices={filteredInvoices} />
 				) : (
 					<NothingHere />
 				)}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '../../../context/ThemeContext';
-import { ChevronUpDown } from './ChevronUpDown';
 import { InvoiceAdd } from './InvoiceAdd';
+import { FaChevronRight, FaChevronUp } from 'react-icons/fa';
 
 type InvoiceData = {
 	_id: String;
@@ -13,11 +13,18 @@ type InvoiceData = {
 };
 
 type NavigationListButtonsProps = {
-	invoiceData?: InvoiceData[]
+	invoiceData?: InvoiceData[];
 	setAddInvoice: React.Dispatch<React.SetStateAction<boolean>>;
+	setHandleFilter: React.Dispatch<React.SetStateAction<boolean>>;
+	handleFilter: boolean;
 };
 
-export const NavigationListButtons = ({setAddInvoice,invoiceData}: NavigationListButtonsProps) => {
+export const NavigationListButtons = ({
+	setAddInvoice,
+	invoiceData,
+	setHandleFilter,
+	handleFilter,
+}: NavigationListButtonsProps) => {
 	const { theme } = useTheme();
 
 	return (
@@ -55,13 +62,23 @@ export const NavigationListButtons = ({setAddInvoice,invoiceData}: NavigationLis
 							>
 								Filter by status
 							</p>
-							<button className='flex justify-center items-center'>
-								<ChevronUpDown />
+							<button
+								onClick={() => setHandleFilter(!handleFilter)}
+								className={`flex justify-center items-center text-xl p-2}`}
+							>
+								{!handleFilter ? (
+									<FaChevronRight className='text-[#7C5DFA]' />
+								) : (
+									<FaChevronUp className='text-[#7C5DFA]' />
+								)}
 							</button>
 						</div>
 					</div>
 					<div className='flex justify-end items-center w-2/10 h-full'>
-						<button onClick={() => setAddInvoice(true)} className=' w-4/6 h-1/2 flex items-center justify-evenly rounded-3xl bg-dark-buttonBackground'>
+						<button
+							onClick={() => setAddInvoice(true)}
+							className=' w-4/6 h-1/2 flex items-center justify-evenly rounded-3xl bg-dark-buttonBackground'
+						>
 							<div className=' p-2 rounded-3xl bg-[#FFFFFF]'>
 								<InvoiceAdd />
 							</div>

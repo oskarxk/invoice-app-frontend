@@ -2,7 +2,7 @@ import React from 'react';
 import { SingleInvoice } from './SingleInvoice';
 
 type InvoiceData = {
-	_id: String;
+	_id: string;
 	invoiceNumber: string;
 	paymentDate: string;
 	clientName: string;
@@ -11,15 +11,16 @@ type InvoiceData = {
 };
 
 type Props = {
-	invoiceData?: InvoiceData[];
+	filteredInvoices?: InvoiceData[];
 };
 
-export const InvoiceList = ({ invoiceData }: Props) => {
+export const InvoiceList = ({ filteredInvoices }: Props) => {
 	return (
 		<div className='w-1/2 flex flex-col justify-center'>
-			{invoiceData?.map((invoiceItem, index) => (
+			{filteredInvoices?.map((invoiceItem, index) => (
 				<SingleInvoice
 					key={index}
+					_id={invoiceItem._id}
 					invoiceNumber={invoiceItem.invoiceNumber}
 					paymentDate={invoiceItem.paymentDate}
 					clientName={invoiceItem.clientName}
