@@ -77,12 +77,12 @@ export const Login = ({
 					placeholder='Email'
 				/>
 				<Input
+					type={'password'}
 					name={'password'}
 					error={!!(formik.errors.password && formik.touched.password)}
 					errorText={formik.errors.password ? formik.errors.password : ''}
 					value={formik.values.password}
 					onChange={formik.handleChange}
-					type={'password'}
 					placeholder='Password'
 				/>
 				<div className='flex justify-between items-center w-full my-4'>
