@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../../context/ThemeContext';
-import { InvoiceAdd } from './InvoiceAdd';
-import { FaChevronRight, FaChevronUp } from 'react-icons/fa';
+import { FaChevronRight, FaChevronUp, FaPlus  } from 'react-icons/fa';
 
 type InvoiceData = {
 	_id: String;
@@ -19,7 +18,7 @@ type NavigationListButtonsProps = {
 	handleFilter: boolean;
 };
 
-export const NavigationListButtons = ({
+export const InvoiceListNavigation = ({
 	setAddInvoice,
 	invoiceData,
 	setHandleFilter,
@@ -79,8 +78,8 @@ export const NavigationListButtons = ({
 							onClick={() => setAddInvoice(true)}
 							className=' w-4/6 h-1/2 flex items-center justify-evenly rounded-3xl bg-dark-buttonBackground'
 						>
-							<div className=' p-2 rounded-3xl bg-[#FFFFFF]'>
-								<InvoiceAdd />
+							<div className=' p-1 rounded-3xl bg-[#FFFFFF] text-[#7C5DFA]'>
+								<FaPlus/>
 							</div>
 							<p className='text-[#FFFFFF] font-bold text-xs'>Nev invoice</p>
 						</button>

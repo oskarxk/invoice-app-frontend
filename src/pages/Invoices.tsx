@@ -6,51 +6,12 @@ import { useToken } from '../hooks/useToken';
 import { InvoiceList } from '../components/invoice-list/InvoiceList';
 import { ToastContainer, toast } from 'react-toastify';
 import { ToastTheme } from '../components/form-authentication-components/types';
-import { NavigationListButtons } from '../components/invoice-list/Buttons/NavigationListButtons';
+import { InvoiceListNavigation } from '../components/invoice-list/Buttons/InvoiceListNavigation';
 import { NothingHere } from '../components/invoice-list/NothingHere';
 import { Loading } from '../components/invoice-list/Loading';
 import { AddInvoice } from '../components/add-invoice/AddInvoice';
-import FilterPopUp from '../components/invoice-list/FilterPopUp';
-
-type InvoiceProduct = {
-	itemName: string;
-	quantity: number;
-	price: number;
-};
-
-type InvoiceData = {
-	_id: string;
-	invoiceNumber: string;
-	address: string;
-	invoiceAuthorEmail: string;
-	invoiceAuthorId: any;
-	userEmail: string;
-	city: string;
-	postCode: string;
-	country: string;
-	clientName: string;
-	clientEmail: string;
-	clientAdress: string;
-	clientCity: string;
-	clientPostCode: string;
-	clientCountry: string;
-	invoiceDate: string;
-	paymentDate: string;
-	invoiceTitle: string;
-	invoiceSum: number;
-	status: string; 
-	products: InvoiceProduct[];
-};
-
-type InvoiceListData = Pick<
-	InvoiceData,
-	| '_id'
-	| 'invoiceNumber'
-	| 'paymentDate'
-	| 'clientName'
-	| 'invoiceSum'
-	| 'status'
->;
+import { FilterPopUp } from '../components/invoice-list/FilterPopUp';
+import { InvoiceData, InvoiceListData } from '../types/Invoice';
 
 export const Invoices = () => {
 	const { theme } = useTheme();
@@ -68,7 +29,7 @@ export const Invoices = () => {
 	const handleStatusChange = () => {
 		let filteredInvoices = invoiceData;
 
-		if (filteredInvoices !== undefined) {
+		if (filteredInvoices) {
 			if (selectedStatus !== 'all') {
 				filteredInvoices = filteredInvoices.filter(
 					(invoice) => invoice.status === selectedStatus
@@ -106,17 +67,22 @@ export const Invoices = () => {
 					headers: { Authorization: token },
 				})
 				.then((response) => {
-					console.log('RESPONSE', response);
-
 					const mappedData: InvoiceListData[] = response.data.userInvoices.map(
-						(invoice: InvoiceData) => {
+						({
+							_id,
+							invoiceNumber,
+							paymentDate,
+							clientName,
+							invoiceSum,
+							status,
+						}: InvoiceData) => {
 							return {
-								_id: invoice._id,
-								invoiceNumber: invoice.invoiceNumber,
-								paymentDate: invoice.paymentDate,
-								clientName: invoice.clientName,
-								invoiceSum: invoice.invoiceSum,
-								status: invoice.status,
+								_id: _id,
+								invoiceNumber: invoiceNumber,
+								paymentDate: paymentDate,
+								clientName: clientName,
+								invoiceSum: invoiceSum,
+								status: status,
 							};
 						}
 					);
@@ -140,8 +106,6 @@ export const Invoices = () => {
 			setNotifyTheme(undefined);
 		}
 	}, [notifyMessage, notifyTheme]);
-
-	console.log(invoiceData);
 
 	if (isLoading) {
 		return <Loading isLoading={isLoading} />;
@@ -180,7 +144,7 @@ export const Invoices = () => {
 				setNotifyTheme={setNotifyTheme}
 			/>
 			<div className='w-full items-center flex flex-col'>
-				<NavigationListButtons
+				<InvoiceListNavigation
 					invoiceData={invoiceData}
 					setAddInvoice={setAddInvoice}
 					handleFilter={handleFilter}

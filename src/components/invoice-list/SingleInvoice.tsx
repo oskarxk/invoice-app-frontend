@@ -22,9 +22,6 @@ export const SingleInvoice = ({
 	status,
 }: InvoiceDataProps) => {
 	const { theme } = useTheme();
-
-	console.log('NUMBER', invoiceNumber);
-
 	const formattedDate = moment(paymentDate).format('DD MMM YYYY');
 
 	return (

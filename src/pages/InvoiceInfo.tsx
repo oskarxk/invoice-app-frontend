@@ -7,39 +7,9 @@ import { Navigation } from '../components/navigation/Navigation';
 import { ToastContainer } from 'react-toastify';
 import { FaChevronLeft } from 'react-icons/fa';
 import moment from 'moment';
+import { InvoiceData } from '../types/Invoice';
 
-type InvoiceProduct = {
-	itemName: string;
-	quantity: number;
-	price: number;
-	totalPrice: number;
-};
-
-type InvoiceData = {
-	_id: string;
-	invoiceNumber: string;
-	address: string;
-	invoiceAuthorEmail: string;
-	invoiceAuthorId: any;
-	userEmail: string;
-	city: string;
-	postCode: string;
-	country: string;
-	clientName: string;
-	clientEmail: string;
-	clientAdress: string;
-	clientCity: string;
-	clientPostCode: string;
-	clientCountry: string;
-	invoiceDate: string;
-	paymentDate: string;
-	invoiceTitle: string;
-	invoiceSum: number;
-	status: string;
-	products: InvoiceProduct[];
-};
-
-const InvoiceInfo = () => {
+export const InvoiceInfo = () => {
 	const { theme } = useTheme();
 	const { token } = useToken();
 	const { invoideId } = useParams();
@@ -506,4 +476,3 @@ const InvoiceInfo = () => {
 	);
 };
 
-export default InvoiceInfo;

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useToken } from '../../hooks/useToken';
-// import { GenericAddInput } from './GenericAddInput';
 import { invoiceSchema } from './InvoiceAddData';
 import axios from 'axios';
-import thrashIcon from '../../assets/icon-delete.svg';
 import { useEmail } from '../../hooks/useEmail';
 import {
 	SubmitHandler,
@@ -83,15 +81,15 @@ export const AddInvoice = ({
 
 	const watchFields = watch(['products']);
 
-	// useEffect(() => {
-	// 	const values = getValues();
-	// 	values.products?.forEach((product, index) => {
-	// 		const totalPrice = Number(product?.price) * Number(product?.quantity);
-	// 		if (!isNaN(totalPrice)) {
-	// 			setValue(`products.${index}.totalPrice`, totalPrice);
-	// 		}
-	// 	});
-	// }, [watchFields]);
+	useEffect(() => {
+		const values = getValues();
+		values.products?.forEach((product, index) => {
+			const totalPrice = Number(product?.price) * Number(product?.quantity);
+			if (!isNaN(totalPrice) && totalPrice !== product.totalPrice) {
+				setValue(`products.${index}.totalPrice`, totalPrice);
+			}
+		});
+	}, [getValues, setValue, watchFields]);
 
 	const discardData = () => {
 		setAddInvoice(false);

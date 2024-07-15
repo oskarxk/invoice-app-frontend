@@ -9,7 +9,7 @@ type Props = {
 	handleStatusChange: HandleStatusChange;
 };
 
-const FilterPopUp = ({
+export const FilterPopUp = ({
 	handleStatusChange,
 	selectedStatus,
 	setSelectedStatus,
@@ -96,4 +96,3 @@ const FilterPopUp = ({
 	);
 };
 
-export default FilterPopUp;
