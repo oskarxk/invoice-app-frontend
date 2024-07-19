@@ -14,7 +14,7 @@ function App() {
 				<Routes>
 					<Route element={<AuthenticationPrivateRoutes />}>
 						<Route element={<Invoices />} path='/invoices' />
-						<Route element={<InvoiceInfo />} path='/invoices/:invoideId' />
+						<Route element={<InvoiceInfo />} path='/invoices/:invoiceId' />
 					</Route>
 					<Route element={<Authenthication />} path='/' />
 				</Routes>
