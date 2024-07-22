@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useToken } from '../../hooks/useToken';
-import { invoiceSchema } from './InvoiceAddData';
+import { invoiceSchema } from './InvoiceEditData';
 import axios from 'axios';
 import { useEmail } from '../../hooks/useEmail';
 import {
@@ -14,45 +14,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastTheme } from '../form-authentication-components/types';
 import { FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { InvoiceData } from '../../types/Invoice';
 
-type AddInvoiceProps = {
-	addInvoice: boolean;
-	setAddInvoice: React.Dispatch<React.SetStateAction<boolean>>;
-	setNotifyMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
-	setNotifyTheme: React.Dispatch<React.SetStateAction<ToastTheme | undefined>>;
+type EditInvoiceProps = {
+	editInvoice: boolean;
+	setEditInvoice: React.Dispatch<React.SetStateAction<boolean>>;
+	singleInvoiceData?: InvoiceData
+	// setNotifyMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
+	// setNotifyTheme: React.Dispatch<React.SetStateAction<ToastTheme | undefined>>;
 };
 
-type InvoiceProduct = {
-	itemName: string;
-	quantity: number;
-	price: number;
-	totalPrice: number;
-};
-
-type InvoiceData = {
-	streetAdress: string;
-	city: string;
-	postCode: string;
-	country: string;
-	userEmail: string;
-	clientName: string;
-	clientEmail: string;
-	clientStreetAdress: string;
-	clientCity: string;
-	clientPostCode: string;
-	clientCountry: string;
-	invoiceDate: Date;
-	paymentDate: number;
-	invoiceTitle: string;
-	products: InvoiceProduct[];
-};
-
-export const AddInvoice = ({
-	addInvoice,
-	setAddInvoice,
-	setNotifyMessage,
-	setNotifyTheme,
-}: AddInvoiceProps) => {
+export const EditInvoice = ({
+	editInvoice,
+	setEditInvoice,
+	// setNotifyMessage,
+	// setNotifyTheme,
+	singleInvoiceData
+}: EditInvoiceProps) => {
 	const { theme } = useTheme();
 	const { token } = useToken();
 	const { email } = useEmail();
@@ -93,10 +71,36 @@ export const AddInvoice = ({
 	}, [getValues, setValue, watchFields]);
 
 	const discardData = () => {
-		setAddInvoice(false);
+		setEditInvoice(false);
 		setStatus('');
 		reset();
 	};
+
+	useEffect(() => {
+		if (singleInvoiceData) {
+		  setValue('streetAdress', singleInvoiceData.streetAdress);
+		  setValue('city', singleInvoiceData.city);
+		  setValue('postCode', singleInvoiceData.postCode);
+		  setValue('country', singleInvoiceData.country);
+		  setValue('userEmail', singleInvoiceData.userEmail);
+		  setValue('clientName', singleInvoiceData.clientName);
+		  setValue('clientEmail', singleInvoiceData.clientEmail);
+		  setValue('clientStreetAdress', singleInvoiceData.clientStreetAdress);
+		  setValue('clientCity', singleInvoiceData.clientCity);
+		  setValue('clientPostCode', singleInvoiceData.clientPostCode);
+		  setValue('clientCountry', singleInvoiceData.clientCountry);
+		  setValue('invoiceDate', singleInvoiceData.invoiceDate.toString().split('T')[0]);
+		  setValue('paymentDate', singleInvoiceData.paymentDate);
+		  setValue('invoiceTitle', singleInvoiceData.invoiceTitle);
+	
+		  singleInvoiceData.products.forEach((product, index) => {
+			setValue(`products.${index}.itemName`, product.itemName);
+			setValue(`products.${index}.quantity`, product.quantity);
+			setValue(`products.${index}.price`, product.price);
+			setValue(`products.${index}.totalPrice`, product.totalPrice);
+		  });
+		}
+	  }, [singleInvoiceData, setValue]);
 
 	const [status, setStatus] = useState<string>('');
 
@@ -108,13 +112,13 @@ export const AddInvoice = ({
 				'http://localhost:4000/create-invoice',
 				{
 					userEmail,
-					streetAdress: data.streetAdress,
+					address: data.streetAdress,
 					city: data.city,
 					postCode: data.postCode,
 					country: data.country,
 					clientName: data.clientName,
 					clientEmail: data.clientEmail,
-					clientStreetAdress: data.clientStreetAdress,
+					clientAdress: data.clientStreetAdress,
 					clientCity: data.clientCity,
 					clientPostCode: data.clientPostCode,
 					clientCountry: data.clientCountry,
@@ -130,19 +134,19 @@ export const AddInvoice = ({
 			)
 			.then((response) => {
 				console.log(response);
-				setAddInvoice(false);
+				setEditInvoice(false);
 				setStatus('');
 				reset();
-				setNotifyMessage(response.data.message);
-				setNotifyTheme(ToastTheme.SUCCESS);
+				// setNotifyMessage(response.data.message);
+				// setNotifyTheme(ToastTheme.SUCCESS);
 				navigate(0);
 			})
 			.catch((error) => {
 				console.log(error);
-				setAddInvoice(false);
+				setEditInvoice(false);
 				setStatus('');
-				setNotifyMessage(error.response.data.message);
-				setNotifyTheme(ToastTheme.ERROR);
+				// setNotifyMessage(error.response.data.message);
+				// setNotifyTheme(ToastTheme.ERROR);
 			});
 	};
 
@@ -150,7 +154,7 @@ export const AddInvoice = ({
 
 	return (
 		<>
-			{addInvoice && (
+			{editInvoice && (
 				<div className='fixed top-0  w-full h-full bg-black bg-opacity-50 z-30 left-24'>
 					<div className='flex justify-start h-full'>
 						<form
@@ -170,7 +174,7 @@ export const AddInvoice = ({
 												: 'text-dark-textWhite'
 										}`}
 									>
-										New Invoice
+										Edit {singleInvoiceData?.invoiceNumber}
 									</h3>
 								</div>
 								<div className='flex flex-col items-start'>

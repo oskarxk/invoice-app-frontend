@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../../context/ThemeContext';
-import { FaChevronRight, FaChevronUp, FaPlus  } from 'react-icons/fa';
+import { FaChevronRight, FaChevronUp, FaPlus } from 'react-icons/fa';
 
 type InvoiceData = {
 	_id: String;
@@ -27,7 +27,11 @@ export const InvoiceListNavigation = ({
 	const { theme } = useTheme();
 
 	return (
-		<div className='w-full flex justify-center py-8'>
+		<div
+			className={`w-full flex justify-center py-8 sticky top-0 z-10 ${
+				theme === 'light' ? 'bg-light-background' : 'bg-dark-background'
+			}`}
+		>
 			<div className='flex flex-col w-1/2'>
 				<div className='flex items-center w-full'>
 					<div className='flex flex-col w-2/10  text-left'>
@@ -79,7 +83,7 @@ export const InvoiceListNavigation = ({
 							className=' w-4/6 h-1/2 flex items-center justify-evenly rounded-3xl bg-dark-buttonBackground'
 						>
 							<div className=' p-1 rounded-3xl bg-[#FFFFFF] text-[#7C5DFA]'>
-								<FaPlus/>
+								<FaPlus />
 							</div>
 							<p className='text-[#FFFFFF] font-bold text-xs'>Nev invoice</p>
 						</button>

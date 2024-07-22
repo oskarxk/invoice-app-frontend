@@ -8,7 +8,7 @@ export type InvoiceProduct = {
 export type InvoiceData = {
 	_id: string;
 	invoiceNumber: string;
-	address: string;
+	streetAdress: string;
 	invoiceAuthorEmail: string;
 	invoiceAuthorId: any;
 	userEmail: string;
@@ -17,7 +17,7 @@ export type InvoiceData = {
 	country: string;
 	clientName: string;
 	clientEmail: string;
-	clientAdress: string;
+	clientStreetAdress: string;
 	clientCity: string;
 	clientPostCode: string;
 	clientCountry: string;

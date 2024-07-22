@@ -9,6 +9,7 @@ import { FaChevronLeft } from 'react-icons/fa';
 import moment from 'moment';
 import { InvoiceData } from '../types/Invoice';
 import { useEmail } from '../hooks/useEmail';
+import { EditInvoice } from '../components/edit-invoice/EditInvoice';
 
 export const InvoiceInfo = () => {
 	const { theme } = useTheme();
@@ -25,6 +26,8 @@ export const InvoiceInfo = () => {
 	);
 
 	const [deleteModal, setDeleteModal] = useState<boolean>(false);
+	const [editInvoice, setEditInvoice] = useState<boolean>(false);
+
 
 	const { email } = useEmail();
 	const userEmail: string = email !== null ? email : '';
@@ -32,14 +35,14 @@ export const InvoiceInfo = () => {
 	console.log(invoiceId);
 
 	useEffect(() => {
-		const getInvoices = async () => {
+		const getInvoice = async () => {
 			// setIsLoading(true);
 			axios
 				.get(`http://localhost:4000/get-single-invoice/${invoiceId}`, {
 					headers: { Authorization: token },
 				})
 				.then((response) => {
-					// console.log('RESPONSE', response);
+					console.log(response.data);
 					setSingleInvoiceData(response.data.userSingleInvoice);
 
 					// const mappedData: InvoiceListData[] = response.data.userInvoices.map(
@@ -65,7 +68,7 @@ export const InvoiceInfo = () => {
 					console.log(error);
 				});
 		};
-		getInvoices();
+		getInvoice();
 	}, []);
 
 	const deleteInvoice = () => {
@@ -81,11 +84,39 @@ export const InvoiceInfo = () => {
 				console.log(response);
 				// setNotifyMessage(response.data.message);
 				// setNotifyTheme(ToastTheme.SUCCESS);
-				setDeleteModal(false)
-				navigate(-1)
+				setDeleteModal(false);
+				navigate(-1);
 			})
 			.catch((error) => {
 				console.log(error);
+				// setNotifyMessage(error.response.data.message);
+				// setNotifyTheme(ToastTheme.ERROR);
+			});
+	};
+
+	const markAsPaid = () => {
+		axios
+			.put(
+				'http://localhost:4000/mark-as-paid',
+				{
+					userEmail,
+					invoiceId,
+				},
+				{
+					headers: { Authorization: token },
+				}
+			)
+			.then((response) => {
+				console.log(response);
+				// setNotifyMessage(response.data.message);
+				// setNotifyTheme(ToastTheme.SUCCESS);
+				navigate(0);
+			})
+			.catch((error) => {
+				console.error(
+					'Axios error:',
+					error.response ? error.response.data : error.message
+				);
 				// setNotifyMessage(error.response.data.message);
 				// setNotifyTheme(ToastTheme.ERROR);
 			});
@@ -98,7 +129,7 @@ export const InvoiceInfo = () => {
 			{deleteModal && (
 				<div className='flex justify-center items-center fixed top-0  w-full h-full bg-black bg-opacity-50 z-30 left-24'>
 					<div
-						className={`flex-col w-1/3 bg-[#FFFFFF] rounded-lg px-8 py-6 ${
+						className={`flex-col w-1/3 rounded-lg px-8 py-6 ${
 							theme === 'light' ? 'bg-[#FFFFFF]' : 'bg-[#1E2139]'
 						}`}
 					>
@@ -111,7 +142,11 @@ export const InvoiceInfo = () => {
 								Confirm Deletion
 							</p>
 						</div>
-						<div className={`text-left ${theme === 'light' ? 'text-[#888EB0]' : 'text-[#DFE3FA]'}`}>
+						<div
+							className={`text-left ${
+								theme === 'light' ? 'text-[#888EB0]' : 'text-[#DFE3FA]'
+							}`}
+						>
 							<p>
 								Are you sure you want to delete invoice{' '}
 								{singleInvoiceData?.invoiceNumber}? This action cannot be
@@ -143,6 +178,14 @@ export const InvoiceInfo = () => {
 					</div>
 				</div>
 			)}
+			<EditInvoice
+				editInvoice={editInvoice}
+				setEditInvoice={setEditInvoice}
+				singleInvoiceData={singleInvoiceData}
+				
+				// setNotifyMessage={setNotifyMessage}
+				// setNotifyTheme={setNotifyTheme}
+			/>
 			<div
 				className={`flex w-full ${
 					theme === 'light' ? 'bg-light-background' : 'bg-dark-background'
@@ -219,6 +262,7 @@ export const InvoiceInfo = () => {
 												? 'text-[#7E88C3] bg-[#F9FAFE]'
 												: 'text-[#DFE3FA] bg-[#252945]'
 										}`}
+										onClick={() => setEditInvoice(true)}
 									>
 										Edit
 									</button>
@@ -239,6 +283,7 @@ export const InvoiceInfo = () => {
 												? 'text-[#FFFFFF] bg-[#7C5DFA]'
 												: 'text-[#FFFFFF] bg-[#7C5DFA]'
 										}`}
+										onClick={markAsPaid}
 									>
 										Mark as Paid
 									</button>
@@ -278,7 +323,7 @@ export const InvoiceInfo = () => {
 													: 'text-dark-inputFont'
 											}`}
 										>
-											{singleInvoiceData.address}
+											{singleInvoiceData.streetAdress}
 										</p>
 										<p
 											className={`px-1 ${
@@ -379,7 +424,7 @@ export const InvoiceInfo = () => {
 														: 'text-dark-inputFont'
 												}`}
 											>
-												{singleInvoiceData.clientAdress}
+												{singleInvoiceData.clientStreetAdress}
 											</p>
 											<p
 												className={`px-1 pt-1 ${
