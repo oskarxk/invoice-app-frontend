@@ -2,7 +2,7 @@ export type InvoiceProduct = {
 	itemName: string;
 	quantity: number;
 	price: number;
-    totalPrice: number;
+	totalPrice: number;
 };
 
 export type InvoiceData = {
@@ -23,6 +23,7 @@ export type InvoiceData = {
 	clientCountry: string;
 	invoiceDate: string;
 	paymentDate: string;
+	paymentDateDaysDelay: string;
 	invoiceTitle: string;
 	invoiceSum: number;
 	status: string;

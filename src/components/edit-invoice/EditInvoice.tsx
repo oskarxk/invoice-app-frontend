@@ -90,7 +90,7 @@ export const EditInvoice = ({
 		  setValue('clientPostCode', singleInvoiceData.clientPostCode);
 		  setValue('clientCountry', singleInvoiceData.clientCountry);
 		  setValue('invoiceDate', singleInvoiceData.invoiceDate.toString().split('T')[0]);
-		  setValue('paymentDate', singleInvoiceData.paymentDate);
+		  setValue('paymentDate', singleInvoiceData.paymentDateDaysDelay);
 		  setValue('invoiceTitle', singleInvoiceData.invoiceTitle);
 	
 		  singleInvoiceData.products.forEach((product, index) => {
@@ -123,7 +123,7 @@ export const EditInvoice = ({
 					clientPostCode: data.clientPostCode,
 					clientCountry: data.clientCountry,
 					invoiceDate: data.invoiceDate,
-					paymentDate: data.paymentDate,
+					paymentDate: data.paymentDateDaysDelay,
 					invoiceTitle: data.invoiceTitle,
 					products: data.products,
 					status: status,
