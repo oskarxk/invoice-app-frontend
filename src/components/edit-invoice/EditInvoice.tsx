@@ -16,10 +16,12 @@ import { FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { InvoiceData } from '../../types/Invoice';
 
+
+
 type EditInvoiceProps = {
 	editInvoice: boolean;
 	setEditInvoice: React.Dispatch<React.SetStateAction<boolean>>;
-	singleInvoiceData?: InvoiceData
+	singleInvoiceData?: InvoiceData;
 	// setNotifyMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
 	// setNotifyTheme: React.Dispatch<React.SetStateAction<ToastTheme | undefined>>;
 };
@@ -29,7 +31,7 @@ export const EditInvoice = ({
 	setEditInvoice,
 	// setNotifyMessage,
 	// setNotifyTheme,
-	singleInvoiceData
+	singleInvoiceData,
 }: EditInvoiceProps) => {
 	const { theme } = useTheme();
 	const { token } = useToken();
@@ -72,61 +74,63 @@ export const EditInvoice = ({
 
 	const discardData = () => {
 		setEditInvoice(false);
-		setStatus('');
 		reset();
 	};
 
 	useEffect(() => {
 		if (singleInvoiceData) {
-		  setValue('streetAdress', singleInvoiceData.streetAdress);
-		  setValue('city', singleInvoiceData.city);
-		  setValue('postCode', singleInvoiceData.postCode);
-		  setValue('country', singleInvoiceData.country);
-		  setValue('userEmail', singleInvoiceData.userEmail);
-		  setValue('clientName', singleInvoiceData.clientName);
-		  setValue('clientEmail', singleInvoiceData.clientEmail);
-		  setValue('clientStreetAdress', singleInvoiceData.clientStreetAdress);
-		  setValue('clientCity', singleInvoiceData.clientCity);
-		  setValue('clientPostCode', singleInvoiceData.clientPostCode);
-		  setValue('clientCountry', singleInvoiceData.clientCountry);
-		  setValue('invoiceDate', singleInvoiceData.invoiceDate.toString().split('T')[0]);
-		  setValue('paymentDate', singleInvoiceData.paymentDateDaysDelay);
-		  setValue('invoiceTitle', singleInvoiceData.invoiceTitle);
-	
-		  singleInvoiceData.products.forEach((product, index) => {
-			setValue(`products.${index}.itemName`, product.itemName);
-			setValue(`products.${index}.quantity`, product.quantity);
-			setValue(`products.${index}.price`, product.price);
-			setValue(`products.${index}.totalPrice`, product.totalPrice);
-		  });
-		}
-	  }, [singleInvoiceData, setValue]);
+			setValue('streetAdress', singleInvoiceData.streetAdress);
+			setValue('city', singleInvoiceData.city);
+			setValue('postCode', singleInvoiceData.postCode);
+			setValue('country', singleInvoiceData.country);
+			setValue('userEmail', singleInvoiceData.userEmail);
+			setValue('clientName', singleInvoiceData.clientName);
+			setValue('clientEmail', singleInvoiceData.clientEmail);
+			setValue('clientStreetAdress', singleInvoiceData.clientStreetAdress);
+			setValue('clientCity', singleInvoiceData.clientCity);
+			setValue('clientPostCode', singleInvoiceData.clientPostCode);
+			setValue('clientCountry', singleInvoiceData.clientCountry);
+			setValue(
+				'invoiceDate',
+				singleInvoiceData.invoiceDate.toString().split('T')[0]
+			);
+			setValue('paymentDate', singleInvoiceData.paymentDateDaysDelay.toString());
+			setValue('invoiceTitle', singleInvoiceData.invoiceTitle);
 
-	const [status, setStatus] = useState<string>('');
+			singleInvoiceData.products.forEach((product, index) => {
+				setValue(`products.${index}.itemName`, product.itemName);
+				setValue(`products.${index}.quantity`, product.quantity);
+				setValue(`products.${index}.price`, product.price);
+				setValue(`products.${index}.totalPrice`, product.totalPrice);
+			});
+		}
+	}, [singleInvoiceData, setValue]);
 
 	const onSubmit: SubmitHandler<InvoiceData> = (data) => {
 		console.log(data);
 
 		axios
-			.post(
-				'http://localhost:4000/create-invoice',
+			.put(
+				'http://localhost:4000/edit-invoice',
 				{
+					_id: singleInvoiceData?._id,
+					invoiceNumber: singleInvoiceData?.invoiceNumber,
 					userEmail,
-					address: data.streetAdress,
+					streetAdress: data.streetAdress,
 					city: data.city,
 					postCode: data.postCode,
 					country: data.country,
 					clientName: data.clientName,
 					clientEmail: data.clientEmail,
-					clientAdress: data.clientStreetAdress,
+					clientStreetAdress: data.clientStreetAdress,
 					clientCity: data.clientCity,
 					clientPostCode: data.clientPostCode,
 					clientCountry: data.clientCountry,
 					invoiceDate: data.invoiceDate,
-					paymentDate: data.paymentDateDaysDelay,
+					paymentDate: data.paymentDate,
 					invoiceTitle: data.invoiceTitle,
 					products: data.products,
-					status: status,
+					status: singleInvoiceData?.status,
 				},
 				{
 					headers: { Authorization: token },
@@ -135,22 +139,18 @@ export const EditInvoice = ({
 			.then((response) => {
 				console.log(response);
 				setEditInvoice(false);
-				setStatus('');
 				reset();
 				// setNotifyMessage(response.data.message);
 				// setNotifyTheme(ToastTheme.SUCCESS);
-				navigate(0);
 			})
 			.catch((error) => {
 				console.log(error);
 				setEditInvoice(false);
-				setStatus('');
 				// setNotifyMessage(error.response.data.message);
 				// setNotifyTheme(ToastTheme.ERROR);
 			});
 	};
 
-	const navigate = useNavigate();
 
 	return (
 		<>
@@ -741,8 +741,8 @@ export const EditInvoice = ({
 										</button>
 									</div>
 								</div>
-								<div className='w-full flex my-2 pb-8'>
-									<div className='flex justify-start w-1/2'>
+								<div className='w-full justify-end flex my-2 pb-8'>
+									<div className='flex justify-between w-1/2'>
 										<button
 											className={`w-1/2 py-2 rounded-lg ${
 												theme === 'light'
@@ -751,21 +751,7 @@ export const EditInvoice = ({
 											}`}
 											onClick={discardData}
 										>
-											Discard
-										</button>
-									</div>
-									<div className='flex justify-between w-1/2'>
-										<button
-											className={`w-4.5/10 py-2 rounded-lg ${
-												theme === 'light'
-													? ' bg-[#373B53] text-light-textLightBoth'
-													: 'bg-[#373B53] text-dark-inputFont'
-											}`}
-											disabled={isSubmitting}
-											type='submit'
-											onClick={() => setStatus('Draft')}
-										>
-											{isSubmitting ? 'Loading...' : 'Save as Draft'}
+											Cancel
 										</button>
 										<button
 											className={`w-4.5/10 py-2 rounded-lg ${
@@ -775,9 +761,8 @@ export const EditInvoice = ({
 											}`}
 											disabled={isSubmitting}
 											type='submit'
-											onClick={() => setStatus('Pending')}
 										>
-											{isSubmitting ? 'Loading...' : 'Save & send'}
+											{isSubmitting ? 'Loading...' : 'Save Changes'}
 										</button>
 									</div>
 								</div>

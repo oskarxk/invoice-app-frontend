@@ -55,7 +55,7 @@ export const invoiceSchema = z.object({
 		.date()
 		.min(minDate, { message: 'Date is too early!' })
 		.max(maxDate, { message: 'Date is too far in the future!' }),
-	paymentDate: z.enum(['1', '7', '14', '30']),
+	paymentDate: z.enum([('1'), '7', '14', '30']),
 	invoiceTitle: z
 		.string()
 		.min(2, 'Invoice title is required')

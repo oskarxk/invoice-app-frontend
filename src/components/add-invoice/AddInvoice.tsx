@@ -13,7 +13,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastTheme } from '../form-authentication-components/types';
 import { FaTrash } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 
 type AddInvoiceProps = {
 	addInvoice: boolean;
@@ -135,7 +134,6 @@ export const AddInvoice = ({
 				reset();
 				setNotifyMessage(response.data.message);
 				setNotifyTheme(ToastTheme.SUCCESS);
-				navigate(0);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -145,8 +143,6 @@ export const AddInvoice = ({
 				setNotifyTheme(ToastTheme.ERROR);
 			});
 	};
-
-	const navigate = useNavigate();
 
 	return (
 		<>
